@@ -1,0 +1,12 @@
+package br.com.pedidos_api.dtos.response;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+public record PedidoPesquisaResponse(
+        Long idPedido,
+        LocalDate dataEmissao,
+        BigDecimal valorTotal,
+        String cliente
+) {
+}
