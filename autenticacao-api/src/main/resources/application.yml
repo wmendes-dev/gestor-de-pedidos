@@ -1,0 +1,37 @@
+# PORTA
+server:
+  port: 8080
+
+# DATASOURCE
+spring:
+  datasource:
+    url: jdbc:h2:mem:autenticacaodb
+    driver-class-name: org.h2.Driver
+    username: admin
+    password: ""
+  # H2 DATABASE
+  h2:
+    console:
+      enabled: true  # URL -> http://localhost:8080/h2-console
+  # JPA / HIBERNATE
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+
+# SWAGGER / OpenAPI
+springdoc:
+  swagger-ui:
+    operationsSorter: method  # URL -> http://localhost:8080/swagger-ui/index.html
+
+# JWT CONFIGURATION
+jwt:
+  secret: ${JWT_SECRET:3049b316d7dc1bcce7249d0a1f814de1546011accbb88f345012feaf739a3d13}
+  accessToken:
+    expiration: 3600000 # 1 hora
+  refreshToken:
+    expiration: 604800000 # 7 dias
