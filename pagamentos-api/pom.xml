@@ -14,7 +14,7 @@
     <name>pagamentos-api</name>
     <properties>
         <java.version>21</java.version>
-        <start-class>br.com.clientes_api.ClientesApplication</start-class>
+        <start-class>br.com.pagamentos_api.AnalisePagamentoApplication</start-class>
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     </properties>
     <dependencies>
