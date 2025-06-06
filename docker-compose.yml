@@ -20,5 +20,53 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  autenticacao-api:
+    build:
+      context: ./autenticacao-api
+      dockerfile: Dockerfile
+    container_name: autenticacao-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - kafka
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+  pedidos-api:
+    build:
+      context: ./pedidos-api
+      dockerfile: Dockerfile
+    container_name: pedidos-api
+    ports:
+      - "8081:8081"
+    depends_on:
+      - kafka
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+  estoque-api:
+    build:
+      context: ./estoque-api
+      dockerfile: Dockerfile
+    container_name: estoque-api
+    ports:
+      - "8082:8082"
+    depends_on:
+      - kafka
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+
+  pagamentos-api:
+    build:
+      context: ./pagamentos-api
+      dockerfile: Dockerfile
+    container_name: pagamentos-api
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafka
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
