@@ -2,12 +2,12 @@ package br.com.pedidos_api.mappers;
 
 import br.com.pedidos_api.dtos.request.PedidoRequest;
 import br.com.pedidos_api.dtos.request.ProdutoPedidoRequest;
-import br.com.pedidos_api.dtos.request.ResumoClienteRequest;
+import br.com.pedidos_api.dtos.request.ResumoUsuarioRequest;
 import br.com.pedidos_api.dtos.request.ResumoProdutoRequest;
 import br.com.pedidos_api.dtos.response.PedidoResponse;
 import br.com.pedidos_api.entities.Pedido;
 import br.com.pedidos_api.entities.ProdutoPedido;
-import br.com.pedidos_api.entities.ResumoCliente;
+import br.com.pedidos_api.entities.ResumoUsuario;
 import br.com.pedidos_api.entities.ResumoProduto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,7 +20,7 @@ public abstract class PedidoMapper {
 
     public abstract PedidoResponse converterParaPedidoResponse(Pedido pedido);
 
-    @Mapping(target = "cliente", expression = "java(converterParaResumoCliente(pedidoRequest.cliente()))")
+    @Mapping(target = "usuario", expression = "java(converterParaResumoUsuario(pedidoRequest.usuario()))")
     @Mapping(target = "produtosPedido", expression = "java(converterParaProdutoPedidoList(pedido, pedidoRequest.produtosPedido()))")
     public abstract Pedido converterParaPedido(PedidoRequest pedidoRequest);
 
@@ -33,7 +33,7 @@ public abstract class PedidoMapper {
         pedido.setValorDesconto(pedidoRequest.valorDesconto());
         pedido.setValorTotal(pedidoRequest.valorTotal());
 
-        pedido.setCliente(converterParaResumoCliente(pedidoRequest.cliente()));
+        pedido.setUsuario(converterParaResumoUsuario(pedidoRequest.usuario()));
 
         List<ProdutoPedido> produtoPedidoList = converterParaProdutoPedidoList(pedido, pedidoRequest.produtosPedido());
         if (pedido.getProdutosPedido() != null) {
@@ -48,8 +48,8 @@ public abstract class PedidoMapper {
         }
     }
 
-    public ResumoCliente converterParaResumoCliente(ResumoClienteRequest resumoClienteRequest) {
-        return new ResumoCliente(resumoClienteRequest);
+    public ResumoUsuario converterParaResumoUsuario(ResumoUsuarioRequest resumoUsuarioRequest) {
+        return new ResumoUsuario(resumoUsuarioRequest);
     }
 
     public List<ProdutoPedido> converterParaProdutoPedidoList(Pedido pedido, List<ProdutoPedidoRequest> produtoPedidoRequestList) {

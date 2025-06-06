@@ -7,6 +7,6 @@ public record PedidoPesquisaResponse(
         Long idPedido,
         LocalDate dataEmissao,
         BigDecimal valorTotal,
-        String cliente
+        String usuario
 ) {
 }

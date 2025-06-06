@@ -29,7 +29,7 @@ public class Pedido {
     private BigDecimal valorTotal;
 
     @Embedded
-    private ResumoCliente cliente;
+    private ResumoUsuario usuario;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdutoPedido> produtosPedido = new ArrayList<>();

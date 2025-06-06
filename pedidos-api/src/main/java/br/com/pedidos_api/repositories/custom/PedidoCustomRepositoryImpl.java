@@ -37,7 +37,6 @@ public class PedidoCustomRepositoryImpl implements PedidoCustomRepository {
 
         private final CriteriaBuilder criteriaBuilder;
         private Root<Pedido> fromPedido;
-        private Join<Object, Object> joinCliente;
 
         public PedidoQuery() {
             this.criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -65,7 +64,7 @@ public class PedidoCustomRepositoryImpl implements PedidoCustomRepository {
                     this.fromPedido.get("idPedido").alias("idPedido"),
                     this.fromPedido.get("dataEmissao").alias("dataEmissao"),
                     this.fromPedido.get("valorTotal").alias("valorTotal"),
-                    this.joinCliente.get("nome").alias("cliente")
+                    this.fromPedido.get("usuario").get("nomeCompleto").alias("usuario")
             ));
 
             aplicarFiltros(querySelect, pedidoRequestParams);
@@ -79,15 +78,14 @@ public class PedidoCustomRepositoryImpl implements PedidoCustomRepository {
 
         private void prepararClausulas(CriteriaQuery<?> criteriaQuery) {
             this.fromPedido = criteriaQuery.from(Pedido.class);
-            this.joinCliente = this.fromPedido.join("cliente");
         }
 
         private void aplicarFiltros(CriteriaQuery<?> criteriaQuery, PedidoRequestParams pedidoRequestParams) {
             List<Predicate> predicates = new ArrayList<>();
 
-            String cliente = pedidoRequestParams.cliente();
-            if (!ObjectUtils.isEmpty(cliente)) {
-                predicates.add(this.criteriaBuilder.like(this.joinCliente.get("nome"), "%" + cliente + "%"));
+            String usuario = pedidoRequestParams.usuario();
+            if (!ObjectUtils.isEmpty(usuario)) {
+                predicates.add(this.criteriaBuilder.like(this.fromPedido.get("usuario").get("nomeCompleto"), "%" + usuario + "%"));
             }
 
             LocalDate dataInicio = pedidoRequestParams.dataInicio();

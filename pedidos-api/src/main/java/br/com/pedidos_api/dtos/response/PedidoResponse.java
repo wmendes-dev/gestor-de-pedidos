@@ -6,11 +6,10 @@ import java.util.List;
 
 public record PedidoResponse(
         Long idPedido,
-        LocalDate dataEmissao,
         BigDecimal valorSubTotal,
         BigDecimal valorDesconto,
         BigDecimal valorTotal,
-        ResumoClienteResponse cliente,
+        ResumoUsuarioResponse usuario,
         List<ProdutoPedidoResponse> produtosPedido
 ) {
 }
