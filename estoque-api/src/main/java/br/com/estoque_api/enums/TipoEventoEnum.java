@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TipoEventoEnum {
 
-    ESTOQUE_RESERVADO("estoque-reservado", "ReservaEstoque", Long.class);
+    ESTOQUE_RESERVADO("estoque-reservado", "ReservaEstoque", Long.class),
+    ESTOQUE_MOVIMENTADO("estoque-movimentado", "MovimentacaoEstoque", Long.class);
 
     private final String topico;
     private final String tipoAgregado;

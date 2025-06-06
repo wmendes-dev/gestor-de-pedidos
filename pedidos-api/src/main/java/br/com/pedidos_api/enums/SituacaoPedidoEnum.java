@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum SituacaoPedidoEnum {
 
     CRIADO("Criado"),
+    CONFIRMADO("Confirmado"),
     CANCELADO("Cancelado");
 
     private final String descricao;

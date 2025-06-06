@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
-public class ReservaEstoqueProducer implements IEventoProducer<Long> {
+public class EstoqueReservadoProducer implements IEventoProducer<Long> {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 

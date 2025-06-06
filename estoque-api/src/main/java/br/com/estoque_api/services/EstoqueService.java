@@ -80,12 +80,12 @@ public class EstoqueService {
     }
 
     @Transactional
-    public void criarMovimentacaoEstoque(Long idPedido) {
+    public MovimentacaoEstoque criarMovimentacaoEstoque(Long idPedido) {
         ReservaEstoque reservaEstoque = this.reservaEstoqueRepository.findByIdPedido(idPedido)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Reserva de estoque não encontrada", idPedido));
 
         MovimentacaoEstoque movimentacaoEstoque = new MovimentacaoEstoque(reservaEstoque);
-        this.movimentacaoEstoqueRepository.save(movimentacaoEstoque);
+        return this.movimentacaoEstoqueRepository.save(movimentacaoEstoque);
     }
 
 }
