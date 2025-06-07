@@ -33,7 +33,7 @@ springdoc:
 
 # JWT CONFIGURATION
 jwt:
-  secret: ${JWT_SECRET:3049b316d7dc1bcce7249d0a1f814de1546011accbb88f345012feaf739a3d13}
+  secret: ${JWT_SECRET:umaSecretMuitoMaisLongaQue32Caracteres123456}
   accessToken:
     expiration: 3600000 # 1 hora
   refreshToken:
