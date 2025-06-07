@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -22,8 +21,6 @@ import java.util.List;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SegurancaConfig {
-
-    private final AutenticacaoFilter jwtAuthenticationFilter;
 
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",
@@ -48,17 +45,18 @@ public class SegurancaConfig {
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated()
                 )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwt -> {
+                        }))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 );
 
         return http.build();
     }
-
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
