@@ -31,6 +31,9 @@ public class Pedido {
     @Embedded
     private ResumoUsuario usuario;
 
+    @Embedded
+    private ResumoFormaPagamento formaPagamento;
+
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProdutoPedido> produtosPedido = new ArrayList<>();
 

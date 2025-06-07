@@ -5,12 +5,11 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum SituacaoPedidoEnum {
+public enum MetodoPagamentoEnum {
 
-    CRIADO("Criado"),
-    AGUARDANDO_PAGAMENTO("Aguardando pagamento"),
-    CONFIRMADO("Confirmado"),
-    CANCELADO("Cancelado");
+    CARTAO_CREDITO("Cartão de Crédito"),
+    PIX("Pix"),
+    BOLETO("Boleto");
 
     private final String descricao;
 

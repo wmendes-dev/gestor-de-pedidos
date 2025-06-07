@@ -1,6 +1,6 @@
 package br.com.pagamentos_api.services.pagamento;
 
-import br.com.pagamentos_api.dtos.request.PagamentoRequest;
+import br.com.pagamentos_api.dtos.interfaces.IPagamento;
 import br.com.pagamentos_api.entities.AnalisePagamento;
 import br.com.pagamentos_api.enums.TipoEventoEnum;
 import br.com.pagamentos_api.services.EventoOutboxService;
@@ -24,8 +24,8 @@ public class PagamentoService {
     private final AnalisePagamentoConclusaoStrategyFactory analisePagamentoConclusaoStrategyFactory;
 
     @Transactional
-    public void iniciarAnalisePagamento(PagamentoRequest pagamentoRequest) {
-        AnalisePagamento analisePagamento = this.analisePagamentoService.criarAnalisePagamento(pagamentoRequest);
+    public void processarAnalisePagamento(IPagamento iPagamento) {
+        AnalisePagamento analisePagamento = this.analisePagamentoService.criarAnalisePagamento(iPagamento);
         this.eventoOutboxService.criarEvento(
                 analisePagamento.getIdAnalisePagamento(),
                 TipoEventoEnum.ANALISE_PAGAMENTO_CRIADA,

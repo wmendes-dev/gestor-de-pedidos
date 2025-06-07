@@ -35,6 +35,7 @@ springdoc:
 jwt:
   secret: ${JWT_SECRET:umaSecretMuitoMaisLongaQue32Caracteres123456}
   accessToken:
-    expiration: 3600000 # 1 hora
+    expiration: 604800000 # 7 dias
+#    expiration: 3600000 # 1 hora
   refreshToken:
     expiration: 604800000 # 7 dias

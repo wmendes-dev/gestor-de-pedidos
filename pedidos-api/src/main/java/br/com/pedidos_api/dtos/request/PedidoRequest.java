@@ -13,6 +13,8 @@ public record PedidoRequest(
         BigDecimal valorTotal,
         @NotNull(message = "Usuário é obrigatório")
         ResumoUsuarioRequest usuario,
+        @NotNull(message = "Forma de pagamento é obrigatório")
+        ResumoFormaPagamentoRequest formaPagamento,
         @NotNull(message = "Produtos são obrigatórios")
         List<ProdutoPedidoRequest> produtosPedido
 ) {

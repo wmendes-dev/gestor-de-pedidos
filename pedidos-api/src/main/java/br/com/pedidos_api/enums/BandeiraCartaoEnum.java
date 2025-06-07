@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum SituacaoPedidoEnum {
+public enum BandeiraCartaoEnum {
 
-    CRIADO("Criado"),
-    AGUARDANDO_PAGAMENTO("Aguardando pagamento"),
-    CONFIRMADO("Confirmado"),
-    CANCELADO("Cancelado");
+    VISA("Visa"),
+    MASTERCARD("Mastercard"),
+    AMEX("Amex"),
+    ELO("Elo");
 
     private final String descricao;
 

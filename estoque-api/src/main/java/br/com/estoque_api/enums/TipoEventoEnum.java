@@ -1,5 +1,6 @@
 package br.com.estoque_api.enums;
 
+import br.com.estoque_api.dtos.event.EstoqueReservadoEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -7,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TipoEventoEnum {
 
-    ESTOQUE_RESERVADO("estoque-reservado", "ReservaEstoque", Long.class),
+    ESTOQUE_RESERVADO("estoque-reservado", "ReservaEstoque", EstoqueReservadoEvent.class),
     ESTOQUE_MOVIMENTADO("estoque-movimentado", "MovimentacaoEstoque", Long.class);
 
     private final String topico;

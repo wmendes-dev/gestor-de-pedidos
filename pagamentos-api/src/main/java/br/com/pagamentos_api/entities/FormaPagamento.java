@@ -1,6 +1,6 @@
 package br.com.pagamentos_api.entities;
 
-import br.com.pagamentos_api.dtos.request.PagamentoRequest;
+import br.com.pagamentos_api.dtos.interfaces.IPagamento;
 import br.com.pagamentos_api.enums.BandeiraCartaoEnum;
 import br.com.pagamentos_api.enums.MetodoPagamentoEnum;
 import jakarta.persistence.*;
@@ -30,10 +30,10 @@ public class FormaPagamento {
     public FormaPagamento() {
     }
 
-    public FormaPagamento(PagamentoRequest pagamentoRequest) {
-        this.metodoPagamento = pagamentoRequest.metodoPagamento();
-        this.bandeiraCartao = pagamentoRequest.bandeiraCartao();
-        this.quantidadeParcelas = pagamentoRequest.quantidadeParcelas();
+    public FormaPagamento(IPagamento iFormaPagamento) {
+        this.metodoPagamento = iFormaPagamento.metodoPagamento();
+        this.bandeiraCartao = iFormaPagamento.bandeiraCartao();
+        this.quantidadeParcelas = iFormaPagamento.quantidadeParcelas();
     }
 
 }

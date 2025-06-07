@@ -17,8 +17,8 @@ public class PagamentoController {
     private final PagamentoService pagamentoService;
 
     @PostMapping
-    public void criarProduto(@RequestBody @Valid PagamentoRequest pagamentoRequest) {
-        this.pagamentoService.iniciarAnalisePagamento(pagamentoRequest);
+    public void processarAnalisePagamento(@RequestBody @Valid PagamentoRequest pagamentoRequest) {
+        this.pagamentoService.processarAnalisePagamento(pagamentoRequest);
     }
 
 }

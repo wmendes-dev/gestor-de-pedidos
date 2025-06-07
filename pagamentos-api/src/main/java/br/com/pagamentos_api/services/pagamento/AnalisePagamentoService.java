@@ -1,6 +1,6 @@
 package br.com.pagamentos_api.services.pagamento;
 
-import br.com.pagamentos_api.dtos.request.PagamentoRequest;
+import br.com.pagamentos_api.dtos.interfaces.IPagamento;
 import br.com.pagamentos_api.entities.AnalisePagamento;
 import br.com.pagamentos_api.entities.FormaPagamento;
 import br.com.pagamentos_api.enums.SituacaoAnalisePagamentoEnum;
@@ -22,17 +22,17 @@ public class AnalisePagamentoService {
     private final FormaPagamentoRepository formaPagamentoRepository;
 
     @Transactional
-    public AnalisePagamento criarAnalisePagamento(PagamentoRequest pagamentoRequest) {
+    public AnalisePagamento criarAnalisePagamento(IPagamento iPagamento) {
         AnalisePagamento analisePagamento = new AnalisePagamento();
-        analisePagamento.setValor(pagamentoRequest.valor());
-        analisePagamento.setIdPedido(pagamentoRequest.idPedido());
-        FormaPagamento formaPagamento = criarFormaPagamento(pagamentoRequest);
+        analisePagamento.setValor(iPagamento.valorPagamento());
+        analisePagamento.setIdPedido(iPagamento.idPedido());
+        FormaPagamento formaPagamento = criarFormaPagamento(iPagamento);
         analisePagamento.setFormaPagamento(formaPagamento);
         return this.analisePagamentoRepository.save(analisePagamento);
     }
 
-    private FormaPagamento criarFormaPagamento(PagamentoRequest pagamentoRequest) {
-        return this.formaPagamentoRepository.save(new FormaPagamento(pagamentoRequest));
+    private FormaPagamento criarFormaPagamento(IPagamento iPagamento) {
+        return this.formaPagamentoRepository.save(new FormaPagamento(iPagamento));
     }
 
     @Transactional

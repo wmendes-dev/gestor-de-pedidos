@@ -20,10 +20,10 @@ public class ResumoUsuario {
     @Column(name = "NOME_USUARIO", nullable = false)
     private String nomeCompleto;
 
-    public ResumoUsuario(ResumoUsuarioRequest resumoUsuario) {
-        this.idUsuario = resumoUsuario.idUsuario();
-        this.cpf = resumoUsuario.cpf();
-        this.nomeCompleto = resumoUsuario.nomeCompleto();
+    public ResumoUsuario(ResumoUsuarioRequest resumoUsuarioRequest) {
+        this.idUsuario = resumoUsuarioRequest.idUsuario();
+        this.cpf = resumoUsuarioRequest.cpf();
+        this.nomeCompleto = resumoUsuarioRequest.nomeCompleto();
     }
 
 }

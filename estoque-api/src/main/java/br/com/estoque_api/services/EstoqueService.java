@@ -1,5 +1,6 @@
 package br.com.estoque_api.services;
 
+import br.com.estoque_api.dtos.event.EstoqueReservadoEvent;
 import br.com.estoque_api.dtos.event.PedidoCriadoEvent;
 import br.com.estoque_api.dtos.event.ProdutoPedidoEvent;
 import br.com.estoque_api.entities.MovimentacaoEstoque;
@@ -40,7 +41,7 @@ public class EstoqueService {
 
         ReservaEstoque reservaEstoque = criarReservaEstoque(pedidoCriadoEvent);
         this.eventoOutboxService.criarEvento(
-                reservaEstoque.getIdReservaEstoque(),
+                new EstoqueReservadoEvent(pedidoCriadoEvent),
                 TipoEventoEnum.ESTOQUE_RESERVADO,
                 reservaEstoque.getIdReservaEstoque().toString());
     }
@@ -63,10 +64,10 @@ public class EstoqueService {
         this.produtoService.atualizarQuantidadeDisponivel(produto, novaQuantidadeDisponivel);
     }
 
-    private ReservaEstoque criarReservaEstoque(PedidoCriadoEvent pedidoMessage) {
-        ReservaEstoque reservaEstoque = new ReservaEstoque(pedidoMessage.idPedido());
+    private ReservaEstoque criarReservaEstoque(PedidoCriadoEvent pedidoCriadoEvent) {
+        ReservaEstoque reservaEstoque = new ReservaEstoque(pedidoCriadoEvent.idPedido());
 
-        for (ProdutoPedidoEvent produtoPedidoEvent : pedidoMessage.produtosPedido()) {
+        for (ProdutoPedidoEvent produtoPedidoEvent : pedidoCriadoEvent.produtosPedido()) {
             Produto produto = this.produtoService.obterProdutoPorId(produtoPedidoEvent.idProduto());
 
             ProdutoReservaEstoque produtoReservaEstoque = new ProdutoReservaEstoque();
