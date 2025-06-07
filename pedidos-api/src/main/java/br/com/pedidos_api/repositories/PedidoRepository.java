@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 public interface PedidoRepository extends JpaRepository<Pedido, Long>, PedidoCustomRepository {
 
     @Modifying
-    @Query("UPDATE Pedido p SET p.situacao = :situacao WHERE p.idPedido = :idPedido")
+    @Query("UPDATE Pedido p SET p.situacao = :situacao, p.dataAtualizacao = CURRENT_TIMESTAMP WHERE p.idPedido = :idPedido")
     void atualizarSituacaoPedido(Long idPedido, SituacaoPedidoEnum situacao);
 
 }

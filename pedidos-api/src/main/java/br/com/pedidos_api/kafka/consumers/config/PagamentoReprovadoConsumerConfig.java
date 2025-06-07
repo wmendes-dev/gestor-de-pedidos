@@ -14,13 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class EstoqueMovimentadoConsumerConfig {
+public class PagamentoReprovadoConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String servidoresBootstrap;
 
     @Bean
-    public ConsumerFactory<String, Long> estoqueMovimentadoConsumerFactory() {
+    public ConsumerFactory<String, Long> pagamentoReprovadoConsumerFactory() {
         JsonDeserializer<Long> deserializer = new JsonDeserializer<>(Long.class);
         deserializer.setRemoveTypeHeaders(true);
         deserializer.addTrustedPackages("*");
@@ -37,9 +37,9 @@ public class EstoqueMovimentadoConsumerConfig {
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Long> estoqueMovimentadoKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Long> pagamentoReprovadoKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Long> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(estoqueMovimentadoConsumerFactory());
+        factory.setConsumerFactory(pagamentoReprovadoConsumerFactory());
         return factory;
     }
 

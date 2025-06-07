@@ -1,4 +1,4 @@
-package br.com.pagamentos_api.services.pagamento.strategy;
+package br.com.pagamentos_api.services.pagamento.analise.strategy;
 
 import br.com.pagamentos_api.dtos.gateway.PagamentoResponse;
 import br.com.pagamentos_api.entities.AnalisePagamento;
@@ -8,7 +8,7 @@ import br.com.pagamentos_api.enums.SituacaoPagamentoEnum;
 import br.com.pagamentos_api.enums.TipoEventoEnum;
 import br.com.pagamentos_api.repositories.PagamentoAprovadoRepository;
 import br.com.pagamentos_api.services.EventoOutboxService;
-import br.com.pagamentos_api.services.pagamento.AnalisePagamentoService;
+import br.com.pagamentos_api.services.pagamento.analise.AnalisePagamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,14 +26,13 @@ public class AnalisePagamentoAprovadoStrategy implements IAnalisePagamentoConclu
     @Override
     @Transactional
     public void concluirAnalise(AnalisePagamento analisePagamento, PagamentoResponse pagamentoResponse) {
+        analisePagamento.setSituacao(SituacaoAnalisePagamentoEnum.APROVADA);
+        this.analisePagamentoService.atualizarAnalisePagamento(analisePagamento);
         criarPagamentoAprovado(analisePagamento, pagamentoResponse);
         this.eventoOutboxService.criarEvento(
                 analisePagamento.getIdPedido(),
                 TipoEventoEnum.PAGAMENTO_APROVADO,
                 analisePagamento.getIdAnalisePagamento().toString());
-
-        analisePagamento.setSituacao(SituacaoAnalisePagamentoEnum.APROVADA);
-        this.analisePagamentoService.atualizarAnalisePagamento(analisePagamento);
     }
 
     private void criarPagamentoAprovado(AnalisePagamento analisePagamento, PagamentoResponse pagamentoResponse) {

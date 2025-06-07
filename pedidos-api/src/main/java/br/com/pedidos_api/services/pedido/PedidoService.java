@@ -1,19 +1,19 @@
-package br.com.pedidos_api.services;
+package br.com.pedidos_api.services.pedido;
 
 import br.com.pedidos_api.dtos.event.PedidoCriadoEvent;
 import br.com.pedidos_api.dtos.request.PedidoRequest;
 import br.com.pedidos_api.dtos.request.PedidoRequestParams;
 import br.com.pedidos_api.dtos.response.PedidoPesquisaResponse;
 import br.com.pedidos_api.dtos.response.PedidoResponse;
-import br.com.pedidos_api.entities.EventoOutbox;
 import br.com.pedidos_api.entities.Pedido;
-import br.com.pedidos_api.enums.SituacaoEventoOutboxEnum;
-import br.com.pedidos_api.enums.SituacaoPedidoEnum;
+import br.com.pedidos_api.enums.EventoAtualizacaoSituacaoPedidoEnum;
 import br.com.pedidos_api.enums.TipoEventoEnum;
 import br.com.pedidos_api.exceptions.EntidadeNaoEncontradaException;
-import br.com.pedidos_api.exceptions.RegraNegocioException;
 import br.com.pedidos_api.mappers.PedidoMapper;
 import br.com.pedidos_api.repositories.PedidoRepository;
+import br.com.pedidos_api.services.EventoOutboxService;
+import br.com.pedidos_api.services.pedido.situacao.IPedidoSituacaoStrategy;
+import br.com.pedidos_api.services.pedido.situacao.PedidoSituacaoStrategyFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +29,8 @@ public class PedidoService {
     private final PedidoMapper pedidoMapper;
 
     private final EventoOutboxService eventoOutboxService;
+
+    private final PedidoSituacaoStrategyFactory pedidoSituacaoStrategyFactory;
 
     public Page<PedidoPesquisaResponse> pesquisarPedidos(PedidoRequestParams pedidoRequestParams, Pageable pageable) {
         return this.pedidoRepository.findAll(pedidoRequestParams, pageable);
@@ -49,19 +51,10 @@ public class PedidoService {
     }
 
     @Transactional
-    public void confirmarPedido(Long idPedido) {
+    public void atualizarSituacaoPedidoPorEventoAtualizacao(Long idPedido, EventoAtualizacaoSituacaoPedidoEnum eventoAtualizacaoSituacaoPedidoEnum) {
         Pedido pedido = obterPedidoPorId(idPedido);
-
-        if (!pedido.getSituacao().equals(SituacaoPedidoEnum.CRIADO)) {
-            throw new RegraNegocioException("Não é possível confirmar o pedido, pois sua situação atual é diferente de 'CRIADO'");
-        }
-
-        atualizarSituacaoPedido(pedido, SituacaoPedidoEnum.CONFIRMADO);
-    }
-
-    @Transactional
-    public void atualizarSituacaoPedido(Pedido pedido, SituacaoPedidoEnum situacaoPedidoEnum) {
-        this.pedidoRepository.atualizarSituacaoPedido(pedido.getIdPedido(), situacaoPedidoEnum);
+        IPedidoSituacaoStrategy strategy = this.pedidoSituacaoStrategyFactory.getStrategy(eventoAtualizacaoSituacaoPedidoEnum);
+        strategy.atualizarSituacaoPedido(pedido);
     }
 
     public Pedido obterPedidoPorId(Long idPedido) {

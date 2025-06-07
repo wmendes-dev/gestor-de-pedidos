@@ -37,3 +37,8 @@ springdoc:
 # JWT CONFIGURATION
 jwt:
   secret: ${JWT_SECRET:umaSecretMuitoMaisLongaQue32Caracteres123456}
+
+logging:
+  level:
+    org.apache.kafka: WARN
+    org.springframework.kafka: WARN

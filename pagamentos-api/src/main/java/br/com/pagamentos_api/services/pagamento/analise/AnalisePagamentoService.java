@@ -1,4 +1,4 @@
-package br.com.pagamentos_api.services.pagamento;
+package br.com.pagamentos_api.services.pagamento.analise;
 
 import br.com.pagamentos_api.dtos.interfaces.IPagamento;
 import br.com.pagamentos_api.entities.AnalisePagamento;

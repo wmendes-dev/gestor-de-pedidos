@@ -1,5 +1,6 @@
 package br.com.pedidos_api.kafka.consumers.config;
 
+import br.com.pedidos_api.dtos.event.EstoqueReservadoEvent;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,32 +15,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
-public class EstoqueMovimentadoConsumerConfig {
+public class EstoqueReservadoConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String servidoresBootstrap;
 
     @Bean
-    public ConsumerFactory<String, Long> estoqueMovimentadoConsumerFactory() {
-        JsonDeserializer<Long> deserializer = new JsonDeserializer<>(Long.class);
+    public ConsumerFactory<String, EstoqueReservadoEvent> estoqueReservadoConsumerFactory() {
+        JsonDeserializer<EstoqueReservadoEvent> deserializer = new JsonDeserializer<>(EstoqueReservadoEvent.class);
         deserializer.setRemoveTypeHeaders(true);
         deserializer.addTrustedPackages("*");
         deserializer.setUseTypeMapperForKey(false);
 
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, this.servidoresBootstrap);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servidoresBootstrap);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "grupo-pedidos");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "grupo-pagamentos");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Long> estoqueMovimentadoKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Long> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(estoqueMovimentadoConsumerFactory());
+    public ConcurrentKafkaListenerContainerFactory<String, EstoqueReservadoEvent> estoqueReservadoKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, EstoqueReservadoEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(estoqueReservadoConsumerFactory());
         return factory;
     }
 

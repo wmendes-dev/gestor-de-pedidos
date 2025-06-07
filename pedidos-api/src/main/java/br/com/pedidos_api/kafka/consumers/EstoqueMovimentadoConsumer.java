@@ -1,7 +1,8 @@
 package br.com.pedidos_api.kafka.consumers;
 
+import br.com.pedidos_api.enums.EventoAtualizacaoSituacaoPedidoEnum;
 import br.com.pedidos_api.exceptions.RegraNegocioException;
-import br.com.pedidos_api.services.PedidoService;
+import br.com.pedidos_api.services.pedido.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +24,11 @@ public class EstoqueMovimentadoConsumer {
     )
     public void consumirEventoEstoqueMovimentado(Long idPedido) {
         try {
-            this.pedidoService.confirmarPedido(idPedido);
+            this.pedidoService.atualizarSituacaoPedidoPorEventoAtualizacao(idPedido, EventoAtualizacaoSituacaoPedidoEnum.ESTOQUE_MOVIMENTADO);
         } catch (RegraNegocioException e) {
             LOGGER.warn("Falha ao confirmar pedido {}: {}", idPedido, e.getMessage());
         } catch (Exception e) {
-            LOGGER.error("Erro inesperado ao processar evento de estoque movimentado para pedido {}", idPedido, e);
+            LOGGER.error("Erro inesperado ao processar evento de estoque movimentado para pedido {}: {}", idPedido, e.getMessage());
         }
     }
 

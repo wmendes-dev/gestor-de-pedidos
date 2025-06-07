@@ -1,4 +1,4 @@
-package br.com.pagamentos_api.services.pagamento.strategy;
+package br.com.pagamentos_api.services.pagamento.analise.strategy;
 
 import br.com.pagamentos_api.enums.SituacaoPagamentoEnum;
 import org.springframework.stereotype.Component;

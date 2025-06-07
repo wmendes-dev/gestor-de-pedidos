@@ -4,7 +4,7 @@ import br.com.pedidos_api.dtos.request.PedidoRequest;
 import br.com.pedidos_api.dtos.request.PedidoRequestParams;
 import br.com.pedidos_api.dtos.response.PedidoPesquisaResponse;
 import br.com.pedidos_api.dtos.response.PedidoResponse;
-import br.com.pedidos_api.services.PedidoService;
+import br.com.pedidos_api.services.pedido.PedidoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
