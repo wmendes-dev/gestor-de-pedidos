@@ -2,6 +2,7 @@ package br.com.pagamentos_api.services.pagamento;
 
 import br.com.pagamentos_api.dtos.interfaces.IPagamento;
 import br.com.pagamentos_api.entities.AnalisePagamento;
+import br.com.pagamentos_api.enums.SituacaoPagamentoEnum;
 import br.com.pagamentos_api.enums.TipoEventoEnum;
 import br.com.pagamentos_api.services.EventoOutboxService;
 import br.com.pagamentos_api.services.SimuladorGatewayPagamento;
@@ -36,7 +37,9 @@ public class PagamentoService {
     public void reprocessarAnalisePagamento(Long idAnalisePagamento) {
         AnalisePagamento analisePagamento = this.analisePagamentoService.obterAnalisePagamentoPorId(idAnalisePagamento);
         if (analisePagamento.getNumeroTentativa() >= 3) {
-            this.analisePagamentoService.cancelarAnalisePagamento(analisePagamento);
+            IAnalisePagamentoConclusaoStrategy strategyPagamentoReprovado = this.analisePagamentoConclusaoStrategyFactory
+                    .getStrategy(SituacaoPagamentoEnum.REPROVADO);
+            strategyPagamentoReprovado.concluirAnalise(analisePagamento, null);
             return;
         }
         verificarGatewayPagamento(analisePagamento);

@@ -3,7 +3,6 @@ package br.com.pagamentos_api.services.pagamento.analise;
 import br.com.pagamentos_api.dtos.interfaces.IPagamento;
 import br.com.pagamentos_api.entities.AnalisePagamento;
 import br.com.pagamentos_api.entities.FormaPagamento;
-import br.com.pagamentos_api.enums.SituacaoAnalisePagamentoEnum;
 import br.com.pagamentos_api.exceptions.EntidadeNaoEncontradaException;
 import br.com.pagamentos_api.repositories.AnalisePagamentoRepository;
 import br.com.pagamentos_api.repositories.FormaPagamentoRepository;
@@ -37,13 +36,6 @@ public class AnalisePagamentoService {
 
     @Transactional
     public void atualizarAnalisePagamento(AnalisePagamento analisePagamento) {
-        analisePagamento.setDataAtualizacao(LocalDateTime.now());
-        this.analisePagamentoRepository.save(analisePagamento);
-    }
-
-    @Transactional
-    public void cancelarAnalisePagamento(AnalisePagamento analisePagamento) {
-        analisePagamento.setSituacao(SituacaoAnalisePagamentoEnum.CANCELADA);
         analisePagamento.setDataAtualizacao(LocalDateTime.now());
         this.analisePagamentoRepository.save(analisePagamento);
     }
