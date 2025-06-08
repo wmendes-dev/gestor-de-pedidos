@@ -81,12 +81,16 @@ public class EstoqueService {
     }
 
     @Transactional
-    public MovimentacaoEstoque criarMovimentacaoEstoque(Long idPedido) {
+    public void movimentarEstoque(Long idPedido) {
         ReservaEstoque reservaEstoque = this.reservaEstoqueRepository.findByIdPedido(idPedido)
                 .orElseThrow(() -> new EntidadeNaoEncontradaException("Reserva de estoque não encontrada", idPedido));
 
         MovimentacaoEstoque movimentacaoEstoque = new MovimentacaoEstoque(reservaEstoque);
-        return this.movimentacaoEstoqueRepository.save(movimentacaoEstoque);
+        movimentacaoEstoque = this.movimentacaoEstoqueRepository.save(movimentacaoEstoque);
+        this.eventoOutboxService.criarEvento(
+                idPedido,
+                TipoEventoEnum.ESTOQUE_MOVIMENTADO,
+                movimentacaoEstoque.getIdMovimentacaoEstoque().toString());
     }
 
 }
