@@ -38,6 +38,7 @@ springdoc:
 jwt:
   secret: ${JWT_SECRET:umaSecretMuitoMaisLongaQue32Caracteres123456}
 
+# LOGS
 logging:
   level:
     org.apache.kafka: WARN
