@@ -3,16 +3,12 @@ package br.com.pedidos_api.kafka.consumers;
 import br.com.pedidos_api.enums.EventoAtualizacaoSituacaoPedidoEnum;
 import br.com.pedidos_api.services.pedido.PedidoService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class PagamentoReprovadoConsumer {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EstoqueReservadoConsumer.class);
 
     private final PedidoService pedidoService;
 
@@ -22,7 +18,8 @@ public class PagamentoReprovadoConsumer {
             containerFactory = "pagamentoReprovadoKafkaListenerContainerFactory"
     )
     public void consumirEventoPagamentoReprovado(Long idPedido) {
-        this.pedidoService.atualizarSituacaoPedidoPorEventoAtualizacao(idPedido, EventoAtualizacaoSituacaoPedidoEnum.PAGAMENTO_REPROVADO);
+        this.pedidoService.atualizarSituacaoPedidoPorEventoAtualizacao(
+                idPedido, EventoAtualizacaoSituacaoPedidoEnum.PAGAMENTO_REPROVADO);
     }
 
 }
