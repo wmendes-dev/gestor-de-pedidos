@@ -1,6 +1,6 @@
 package br.com.estoque_api.kafka.producers;
 
-import br.com.estoque_api.dtos.event.ProdutoIndisponivelEvent;
+import br.com.estoque_api.dtos.event.ErroReservaEstoqueEvent;
 import br.com.estoque_api.enums.TipoEventoEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -11,18 +11,18 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
-public class ProdutoIndisponivelProducer implements IEventoProducer<ProdutoIndisponivelEvent> {
+public class ErroReservaEstoqueProducer implements IEventoProducer<ErroReservaEstoqueEvent> {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Override
-    public CompletableFuture<SendResult<String, Object>> publicarEvento(ProdutoIndisponivelEvent produtoIndisponivelEvent) {
-        return this.kafkaTemplate.send(TipoEventoEnum.PRODUTO_INDISPONIVEL.getTopico(), produtoIndisponivelEvent);
+    public CompletableFuture<SendResult<String, Object>> publicarEvento(ErroReservaEstoqueEvent erroReservaEstoqueEvent) {
+        return this.kafkaTemplate.send(TipoEventoEnum.ERRO_RESERVA_ESTOQUE.getTopico(), erroReservaEstoqueEvent);
     }
 
     @Override
     public TipoEventoEnum getTipoEvento() {
-        return TipoEventoEnum.PRODUTO_INDISPONIVEL;
+        return TipoEventoEnum.ERRO_RESERVA_ESTOQUE;
     }
 
 }

@@ -5,6 +5,6 @@ import java.math.BigDecimal;
 public record ProdutoPedidoEvent(
         Long idProdutoPedido,
         BigDecimal quantidade,
-        Long idProduto
+        ResumoProdutoEvent produto
 ) {
 }

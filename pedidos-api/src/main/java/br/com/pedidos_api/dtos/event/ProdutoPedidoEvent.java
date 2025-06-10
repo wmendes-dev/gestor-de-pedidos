@@ -7,14 +7,14 @@ import java.math.BigDecimal;
 public record ProdutoPedidoEvent(
         Long idProdutoPedido,
         BigDecimal quantidade,
-        Long idProduto
+        ResumoProdutoEvent produto
 ) {
 
     public ProdutoPedidoEvent(ProdutoPedido produtoPedido) {
         this(
                 produtoPedido.getIdProdutoPedido(),
                 produtoPedido.getQuantidade(),
-                produtoPedido.getProduto().getIdProduto()
+                new ResumoProdutoEvent(produtoPedido.getProduto())
         );
     }
 

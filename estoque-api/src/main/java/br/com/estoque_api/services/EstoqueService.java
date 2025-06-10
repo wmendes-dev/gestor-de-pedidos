@@ -8,7 +8,7 @@ import br.com.estoque_api.entities.ReservaEstoque;
 import br.com.estoque_api.enums.TipoEventoEnum;
 import br.com.estoque_api.exceptions.EntidadeNaoEncontradaException;
 import br.com.estoque_api.exceptions.NegocioException;
-import br.com.estoque_api.exceptions.ProdutoIndisponivelNoEstoqueException;
+import br.com.estoque_api.exceptions.ProdutoIndisponivelException;
 import br.com.estoque_api.repositories.MovimentacaoEstoqueRepository;
 import br.com.estoque_api.repositories.ReservaEstoqueRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,14 +37,23 @@ public class EstoqueService {
     public void reservarEstoque(PedidoCriadoEvent pedidoCriadoEvent) {
         if (CollectionUtils.isEmpty(pedidoCriadoEvent.produtosPedido())) return;
 
+        List<ErroProdutoEvent> erroProdutoEventList = new ArrayList<>();
         for (ProdutoPedidoEvent produtoPedidoEvent : pedidoCriadoEvent.produtosPedido()) {
             try {
                 Produto produto = validarDisponibilidadeDoProduto(produtoPedidoEvent);
                 atualizarQuantidadeDisponivelDoProduto(produto, produtoPedidoEvent.quantidade());
             } catch (NegocioException e) {
-                tratarErroDeNegocioAoReservarEstoque(pedidoCriadoEvent.idPedido(), e);
-                return;
+                ErroProdutoEvent erroProdutoEvent = tratarErroDeNegocioAoReservarEstoque(produtoPedidoEvent.produto(), e);
+                erroProdutoEventList.add(erroProdutoEvent);
             }
+        }
+
+        if (!CollectionUtils.isEmpty(erroProdutoEventList)) {
+            this.eventoOutboxService.criarEvento(
+                    new ErroReservaEstoqueEvent(pedidoCriadoEvent.idPedido(), erroProdutoEventList),
+                    TipoEventoEnum.ERRO_RESERVA_ESTOQUE,
+                    pedidoCriadoEvent.idPedido().toString());
+            return;
         }
 
         ReservaEstoque reservaEstoque = criarReservaEstoque(pedidoCriadoEvent);
@@ -52,13 +64,13 @@ public class EstoqueService {
     }
 
     private Produto validarDisponibilidadeDoProduto(ProdutoPedidoEvent produtoPedidoEvent) {
-        Produto produto = this.produtoService.obterProdutoPorId(produtoPedidoEvent.idProduto());
+        Produto produto = this.produtoService.obterProdutoPorId(produtoPedidoEvent.produto().idProduto());
 
         BigDecimal quantidadeSolicitada = produtoPedidoEvent.quantidade();
         BigDecimal quantidadeDisponivel = produto.getQuantidadeDisponivel();
 
         if (quantidadeDisponivel.compareTo(quantidadeSolicitada) < 0) {
-            throw new ProdutoIndisponivelNoEstoqueException(produto.getNome(), produto.getIdProduto(), quantidadeSolicitada, quantidadeDisponivel);
+            throw new ProdutoIndisponivelException();
         }
 
         return produto;
@@ -69,28 +81,21 @@ public class EstoqueService {
         this.produtoService.atualizarQuantidadeDisponivel(produto, novaQuantidadeDisponivel);
     }
 
-    private void tratarErroDeNegocioAoReservarEstoque(Long idPedido, NegocioException e) {
-        if (e instanceof ProdutoIndisponivelNoEstoqueException ex) {
-            this.eventoOutboxService.criarEvento(
-                    new ProdutoIndisponivelEvent(idPedido, ex.getMessage()),
-                    TipoEventoEnum.PRODUTO_INDISPONIVEL,
-                    idPedido.toString());
-            return;
-        }
+    private ErroProdutoEvent tratarErroDeNegocioAoReservarEstoque(ResumoProdutoEvent resumoProdutoEvent, NegocioException e) {
+        Map<Class<? extends NegocioException>, String> movivoErroMap = Map.of(
+                ProdutoIndisponivelException.class, "Produto indisponível no momento",
+                EntidadeNaoEncontradaException.class, "Produto não encontrado"
+        );
 
-        if (e instanceof EntidadeNaoEncontradaException ex) {
-            this.eventoOutboxService.criarEvento(
-                    new ProdutoNaoEncontradoEvent(idPedido, ex.getMessage()),
-                    TipoEventoEnum.PRODUTO_NAO_ENCONTRADO,
-                    idPedido.toString());
-        }
+        String motivoErro = movivoErroMap.getOrDefault(e.getClass(), "Erro inesperado ao reservar estoque");
+        return new ErroProdutoEvent(resumoProdutoEvent.idProduto(), resumoProdutoEvent.nome(), motivoErro);
     }
 
     private ReservaEstoque criarReservaEstoque(PedidoCriadoEvent pedidoCriadoEvent) {
         ReservaEstoque reservaEstoque = new ReservaEstoque(pedidoCriadoEvent.idPedido());
 
         for (ProdutoPedidoEvent produtoPedidoEvent : pedidoCriadoEvent.produtosPedido()) {
-            Produto produto = this.produtoService.obterProdutoPorId(produtoPedidoEvent.idProduto());
+            Produto produto = this.produtoService.obterProdutoPorId(produtoPedidoEvent.produto().idProduto());
 
             ProdutoReservaEstoque produtoReservaEstoque = new ProdutoReservaEstoque();
             produtoReservaEstoque.setQuantidadeReservada(produtoPedidoEvent.quantidade());

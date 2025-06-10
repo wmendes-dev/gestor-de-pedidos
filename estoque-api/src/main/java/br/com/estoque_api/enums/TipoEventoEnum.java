@@ -1,8 +1,7 @@
 package br.com.estoque_api.enums;
 
+import br.com.estoque_api.dtos.event.ErroReservaEstoqueEvent;
 import br.com.estoque_api.dtos.event.EstoqueReservadoEvent;
-import br.com.estoque_api.dtos.event.ProdutoIndisponivelEvent;
-import br.com.estoque_api.dtos.event.ProdutoNaoEncontradoEvent;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,8 +14,7 @@ public enum TipoEventoEnum {
     ESTOQUE_MOVIMENTADO("estoque-movimentado", "MovimentacaoEstoque", Long.class),
 
     // ERRO
-    PRODUTO_INDISPONIVEL("erro-reserva-estoque", "Pedido", ProdutoIndisponivelEvent.class),
-    PRODUTO_NAO_ENCONTRADO("erro-reserva-estoque", "Pedido", ProdutoNaoEncontradoEvent.class);
+    ERRO_RESERVA_ESTOQUE("erro-reserva-estoque", "Pedido", ErroReservaEstoqueEvent.class);
 
     private final String topico;
     private final String tipoAgregado;

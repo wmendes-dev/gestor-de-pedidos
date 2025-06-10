@@ -9,6 +9,7 @@ public enum EventoAtualizacaoSituacaoPedidoEnum {
 
     ESTOQUE_MOVIMENTADO("Estoque movimentado"),
     ESTOQUE_RESERVADO("Estoque reservado"),
+    ERRO_RESERVA_ESTOQUE("Erro ao reservar estoque"),
     PAGAMENTO_APROVADO("Pagamento aprovado"),
     PAGAMENTO_REPROVADO("Pagamento não aprovado");
 
