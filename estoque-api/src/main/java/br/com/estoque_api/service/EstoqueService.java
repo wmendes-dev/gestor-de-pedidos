@@ -40,7 +40,7 @@ public class EstoqueService {
         List<ErroProdutoEvent> erroProdutoEventList = new ArrayList<>();
         for (ProdutoPedidoEvent produtoPedidoEvent : pedidoCriadoEvent.produtosPedido()) {
             try {
-                Produto produto = validarDisponibilidadeDoProduto(produtoPedidoEvent);
+                Produto produto = validarDisponibilidadeDoProduto(produtoPedidoEvent.produto().idProduto(), produtoPedidoEvent.quantidade());
                 atualizarQuantidadeDisponivelDoProduto(produto, produtoPedidoEvent.quantidade());
             } catch (NegocioException e) {
                 ErroProdutoEvent erroProdutoEvent = tratarErroDeNegocioAoReservarEstoque(produtoPedidoEvent.produto(), e);
@@ -63,13 +63,10 @@ public class EstoqueService {
                 reservaEstoque.getIdReservaEstoque().toString());
     }
 
-    private Produto validarDisponibilidadeDoProduto(ProdutoPedidoEvent produtoPedidoEvent) {
-        Produto produto = this.produtoService.obterProdutoPorId(produtoPedidoEvent.produto().idProduto());
+    public Produto validarDisponibilidadeDoProduto(Long idProduto, BigDecimal quantidadeSolicitada) {
+        Produto produto = this.produtoService.obterProdutoPorId(idProduto);
 
-        BigDecimal quantidadeSolicitada = produtoPedidoEvent.quantidade();
-        BigDecimal quantidadeDisponivel = produto.getQuantidadeDisponivel();
-
-        if (quantidadeDisponivel.compareTo(quantidadeSolicitada) < 0) {
+        if (produto.getQuantidadeDisponivel().compareTo(quantidadeSolicitada) < 0) {
             throw new ProdutoIndisponivelException();
         }
 
