@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package br.com.estoque_api;
+
+option java_multiple_files = true;
+option java_package = "br.com.estoque_api.grpc";
+option java_outer_classname = "ProdutosProto";
+
+message ProdutosRequest {
+    repeated ProdutoRequest produtos = 1;
+}
+
+message ProdutoRequest {
+    int64 id_produto = 1;
+    string quantidade = 2;
+}
+
+message ProdutosResponse {
+    repeated ProdutoResponse produtos = 1;
+}
+
+message ProdutoResponse {
+    int64 id_produto = 1;
+    bool disponivel = 2;
+    string mensagem = 3;
+}
+
+service ProdutosService {
+    rpc ValidarDisponibilidadeProdutos (ProdutosRequest) returns (ProdutosResponse);
+}

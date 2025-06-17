@@ -3,6 +3,9 @@ package br.com.estoque_api.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.grpc.server.GlobalServerInterceptor;
+import org.springframework.grpc.server.security.AuthenticationProcessInterceptor;
+import org.springframework.grpc.server.security.GrpcSecurity;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -56,6 +59,14 @@ public class SegurancaConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    @GlobalServerInterceptor
+    AuthenticationProcessInterceptor jwtSecurityFilterChain(GrpcSecurity grpc) throws Exception {
+        return grpc
+                .authorizeRequests(requests ->
+                        requests.allRequests().permitAll()).build();
     }
 
     @Bean
