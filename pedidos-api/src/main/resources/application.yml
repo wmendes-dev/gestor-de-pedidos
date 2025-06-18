@@ -32,7 +32,7 @@ spring:
   grpc:
     client:
       default-channel:
-        address: estoque-api:6565
+        address: ${GRPC_SERVER:localhost:6565}
         negotiation-type: plaintext
 
 # SWAGGER / OpenAPI

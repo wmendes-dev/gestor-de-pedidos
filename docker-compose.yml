@@ -46,6 +46,7 @@ services:
       - kafka
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      GRPC_SERVER: estoque-api:6565
 
   estoque-api:
     build:
