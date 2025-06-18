@@ -27,8 +27,8 @@ Este projeto simula um ambiente real de **microsserviços**, com foco em **comun
 - (`@Scheduled`) tasks buscam periodicamente por eventos pendentes e os publicam no Kafka
 
 ### 📡 gRPC
-- Comunicação direta entre microsserviços utilizando o padrão gRPC
-- Implementado com [Spring gRPC](https://github.com/spring-cloud/spring-cloud-gateway/tree/main/spring-cloud-starter-grpc) para integração eficiente
+- Integração feita com [Spring gRPC](https://github.com/spring-cloud/spring-cloud-gateway/tree/main/spring-cloud-starter-grpc)
+- Comunicação direta e eficiente entre microsserviços
 
 ### 🛠️ Docker & Docker Compose
 - Cada microsserviço é containerizado individualmente
