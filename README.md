@@ -1,6 +1,6 @@
 # 📦 Gestor de Pedidos
 
-Este projeto simula um ambiente real de **microsserviços**, com foco em **comunicação assíncrona baseada em eventos**. Foi criado com propósito didático e como parte do meu portfólio, para demonstrar a aplicação de conceitos como **Arquitetura Orientada a Eventos (Event-Driven Architecture)**, **Kafka**, **Outbox Pattern** e orquestração com **Docker Compose**.
+Este projeto simula um ambiente real de **microsserviços**, com foco em **comunicação assíncrona baseada em eventos**. Foi criado com propósito didático e como parte do meu portfólio, para demonstrar a aplicação de conceitos como **Arquitetura Orientada a Eventos (Event-Driven Architecture)**, **Kafka**, **Outbox Pattern**, **gRPC** e orquestração com **Docker Compose**.
 
 ---
 
@@ -10,6 +10,7 @@ Este projeto simula um ambiente real de **microsserviços**, com foco em **comun
 - Separação de responsabilidades por contexto (ex: pedidos, estoque, pagamento)
 - Cada serviço possui seu próprio banco de dados
 - Comunicação entre serviços é feita de forma assíncrona, orientada a eventos
+- Em pontos específicos, onde integração síncrona é necessária, os serviços utilizam comunicação gRPC.
 
 ### ⚡ Arquitetura Orientada a Eventos (Event-Driven)
 - Os microsserviços publicam e consomem **eventos de domínio** como `PedidoCriado` e `EstoqueReservado`
@@ -24,6 +25,10 @@ Este projeto simula um ambiente real de **microsserviços**, com foco em **comun
 - Garante a consistência entre as operações no banco de dados e o envio de eventos para o Kafka
 - Eventos são persistidos em uma tabela intermediária (`EVENTO_OUTBOX`)
 - (`@Scheduled`) tasks buscam periodicamente por eventos pendentes e os publicam no Kafka
+
+### 📡 gRPC
+- Comunicação direta entre microsserviços utilizando o padrão gRPC
+- Implementado com [Spring gRPC](https://github.com/spring-cloud/spring-cloud-gateway/tree/main/spring-cloud-starter-grpc) para integração eficiente
 
 ### 🛠️ Docker & Docker Compose
 - Cada microsserviço é containerizado individualmente
