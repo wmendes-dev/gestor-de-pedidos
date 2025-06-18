@@ -1,4 +1,8 @@
-FROM eclipse-temurin:21-jdk-alpine AS build
+# FROM eclipse-temurin:21-jdk-alpine AS build
+
+# Usando a imagem base padrão (Debian-based) para o build
+# para evitar problemas com o plugin protoc-gen-grpc-java no Alpine
+FROM eclipse-temurin:21-jdk AS build
 
 WORKDIR /app
 

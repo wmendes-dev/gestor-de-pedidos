@@ -28,6 +28,10 @@ spring:
   # KAFKA
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  # GRPC
+  grpc:
+    server:
+      port: 6565
 
 # SWAGGER / OpenAPI
 springdoc:
@@ -36,7 +40,7 @@ springdoc:
 
 # JWT CONFIGURATION
 jwt:
-  secret: ${JWT_SECRET:umaSecretMuitoMaisLongaQue32Caracteres123456}
+  secret: ${JWT_SECRET:JwtSecretParaGestorDePedidos123456}
 
 # LOGS
 logging:

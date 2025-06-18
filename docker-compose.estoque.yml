@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  estoque-api:
+    build:
+      context: ./estoque-api
+      dockerfile: Dockerfile
+    container_name: estoque-api
+    ports:
+      - "8082:8082"
