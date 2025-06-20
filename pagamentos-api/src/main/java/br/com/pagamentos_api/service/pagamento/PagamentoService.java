@@ -1,5 +1,6 @@
 package br.com.pagamentos_api.service.pagamento;
 
+import br.com.pagamentos_api.domain.dto.gateway.PagamentoResponse;
 import br.com.pagamentos_api.domain.dto.interfaces.IPagamento;
 import br.com.pagamentos_api.domain.entity.AnalisePagamento;
 import br.com.pagamentos_api.domain.enums.SituacaoPagamentoEnum;
@@ -34,29 +35,20 @@ public class PagamentoService {
                 analisePagamento.getIdAnalisePagamento().toString());
     }
 
-    public void reprocessarAnalisePagamento(Long idAnalisePagamento) {
+    @Transactional
+    public void reprovarAnalisePagamento(Long idAnalisePagamento) {
         AnalisePagamento analisePagamento = this.analisePagamentoService.obterAnalisePagamentoPorId(idAnalisePagamento);
-        if (analisePagamento.getNumeroTentativa() >= 3) {
-            IAnalisePagamentoConclusaoStrategy strategyPagamentoReprovado = this.analisePagamentoConclusaoStrategyFactory
-                    .getStrategy(SituacaoPagamentoEnum.REPROVADO);
-            strategyPagamentoReprovado.concluirAnalise(analisePagamento, null);
-            return;
-        }
-        verificarGatewayPagamento(analisePagamento);
+        IAnalisePagamentoConclusaoStrategy strategyPagamentoReprovado = this.analisePagamentoConclusaoStrategyFactory
+                .getStrategy(SituacaoPagamentoEnum.REPROVADO);
+        strategyPagamentoReprovado.concluirAnalise(analisePagamento, null);
     }
 
+    @Transactional
     public void verificarGatewayPagamento(Long idAnalisePagamento) {
         AnalisePagamento analisePagamento = this.analisePagamentoService.obterAnalisePagamentoPorId(idAnalisePagamento);
-        verificarGatewayPagamento(analisePagamento);
-    }
-
-    private void verificarGatewayPagamento(AnalisePagamento analisePagamento) {
-        this.simuladorGatewayPagamento.processarAsync(
-                analisePagamento,
-                pagamentoResponse -> {
-                    IAnalisePagamentoConclusaoStrategy strategy = this.analisePagamentoConclusaoStrategyFactory.getStrategy(pagamentoResponse.situacao());
-                    strategy.concluirAnalise(analisePagamento, pagamentoResponse);
-                });
+        PagamentoResponse pagamentoResponse = this.simuladorGatewayPagamento.processarPagamento(analisePagamento);
+        IAnalisePagamentoConclusaoStrategy strategy = this.analisePagamentoConclusaoStrategyFactory.getStrategy(pagamentoResponse.situacao());
+        strategy.concluirAnalise(analisePagamento, pagamentoResponse);
     }
 
 }

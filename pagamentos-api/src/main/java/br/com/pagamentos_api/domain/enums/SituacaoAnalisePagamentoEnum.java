@@ -9,9 +9,7 @@ public enum SituacaoAnalisePagamentoEnum {
 
     EM_PROCESSAMENTO("Em processamento"),
     APROVADA("Aprovada"),
-    REPROVADA("Reprovada"),
-    CANCELADA("Cancelada"),
-    FALHA("Falha");
+    REPROVADA("Reprovada");
 
     private final String descricao;
 

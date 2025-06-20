@@ -11,7 +11,6 @@ import br.com.pagamentos_api.service.EventoOutboxService;
 import br.com.pagamentos_api.service.pagamento.analise.AnalisePagamentoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +23,6 @@ public class AnalisePagamentoAprovadoStrategy implements IAnalisePagamentoConclu
     private final EventoOutboxService eventoOutboxService;
 
     @Override
-    @Transactional
     public void concluirAnalise(AnalisePagamento analisePagamento, PagamentoResponse pagamentoResponse) {
         analisePagamento.setSituacao(SituacaoAnalisePagamentoEnum.APROVADA);
         this.analisePagamentoService.atualizarAnalisePagamento(analisePagamento);

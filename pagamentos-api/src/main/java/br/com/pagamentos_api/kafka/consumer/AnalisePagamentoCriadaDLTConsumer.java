@@ -7,17 +7,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PagamentoFalhouConsumer {
+public class AnalisePagamentoCriadaDLTConsumer {
 
     private final PagamentoService pagamentoService;
 
     @KafkaListener(
-            topics = "pagamento-falhou",
-            groupId = "grupo-pagamentos",
-            containerFactory = "pagamentoFalhouKafkaListenerContainerFactory"
+            topics = "analise-pagamento-criada-dlt",
+            groupId = "grupo-pagamentos-dlt",
+            containerFactory = "analisePagamentoCriadaDLTKafkaListenerContainerFactory"
     )
-    public void consumirEventoPagamentoFalhou(Long idAnalisePagamento) {
-//        this.pagamentoService.reprocessarAnalisePagamento(idAnalisePagamento);
+    public void consumirDLT(Long idAnalisePagamento) {
+        this.pagamentoService.reprovarAnalisePagamento(idAnalisePagamento);
     }
 
 }

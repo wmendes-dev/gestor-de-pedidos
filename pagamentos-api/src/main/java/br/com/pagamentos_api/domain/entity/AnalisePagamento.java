@@ -20,9 +20,6 @@ public class AnalisePagamento {
     @Column(name = "VALOR")
     private BigDecimal valor;
 
-    @Column(name = "NUMERO_TENTATIVA", nullable = false)
-    private Integer numeroTentativa;
-
     @Column(name = "ID_PEDIDO", nullable = false)
     private Long idPedido;
 
@@ -41,7 +38,6 @@ public class AnalisePagamento {
     private LocalDateTime dataAtualizacao;
 
     public AnalisePagamento() {
-        this.numeroTentativa = 1;
         this.situacao = SituacaoAnalisePagamentoEnum.EM_PROCESSAMENTO;
         this.dataCriacao = LocalDateTime.now();
     }

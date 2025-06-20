@@ -10,17 +10,14 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
-import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.util.backoff.FixedBackOff;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
-public class AnalisePagamentoCriadaConsumerConfig {
+public class AnalisePagamentoCriadaDLTConsumerConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String servidoresBootstrap;
@@ -28,7 +25,7 @@ public class AnalisePagamentoCriadaConsumerConfig {
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Bean
-    public ConsumerFactory<String, Long> analisePagamentoCriadaConsumerFactory() {
+    public ConsumerFactory<String, Long> analisePagamentoCriadaDLTConsumerFactory() {
         JsonDeserializer<Long> deserializer = new JsonDeserializer<>(Long.class);
         deserializer.setRemoveTypeHeaders(true);
         deserializer.addTrustedPackages("*");
@@ -38,26 +35,18 @@ public class AnalisePagamentoCriadaConsumerConfig {
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, servidoresBootstrap);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "grupo-pagamentos");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "grupo-pagamentos-dlt");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Long> analisePagamentoCriadaKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Long> analisePagamentoCriadaDLTKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Long> factory = new ConcurrentKafkaListenerContainerFactory<>();
-        factory.setConsumerFactory(analisePagamentoCriadaConsumerFactory());
-        factory.setCommonErrorHandler(defaultErrorHandler());
+        factory.setConsumerFactory(analisePagamentoCriadaDLTConsumerFactory());
 
         return factory;
-    }
-
-    private DefaultErrorHandler defaultErrorHandler() {
-        return new DefaultErrorHandler(
-                new DeadLetterPublishingRecoverer(this.kafkaTemplate),
-                new FixedBackOff(0L, 2L)
-        );
     }
 
 }
