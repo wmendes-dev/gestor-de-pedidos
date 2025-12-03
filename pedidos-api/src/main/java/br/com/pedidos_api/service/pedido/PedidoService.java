@@ -25,11 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
-
     private final PedidoMapper pedidoMapper;
-
     private final EventoOutboxService eventoOutboxService;
-
     private final PedidoSituacaoStrategyFactory pedidoSituacaoStrategyFactory;
 
     public Page<PedidoPesquisaResponse> pesquisarPedidos(PedidoRequestParams pedidoRequestParams, Pageable pageable) {

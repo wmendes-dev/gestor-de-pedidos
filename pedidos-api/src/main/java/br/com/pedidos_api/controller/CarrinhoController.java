@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/produtos")
+@RequestMapping("/api/v1/carrinho")
 @RequiredArgsConstructor
-public class ProdutoController {
+public class CarrinhoController {
 
     private final ProdutoDisponibilidadeService produtoDisponibilidadeService;
 
-    @PostMapping("/validar-disponibilidade")
+    @PostMapping("/validar-produtos")
     public ResponseEntity<List<ProdutoDisponibilidadeResponse>> validarDisponibilidadeProdutos(@RequestBody List<ProdutoDisponibilidadeRequest> produtoDisponibilidadeRequestList) {
         List<ProdutoDisponibilidadeResponse> produtoDisponibilidadeResponseList = this.produtoDisponibilidadeService
                 .validarDisponibilidadeProdutos(produtoDisponibilidadeRequestList);

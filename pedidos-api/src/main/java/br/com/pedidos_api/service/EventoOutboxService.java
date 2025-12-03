@@ -17,7 +17,6 @@ import java.util.List;
 public class EventoOutboxService {
 
     private final EventoOutboxRepository eventoOutboxRepository;
-
     private final ObjectMapper objectMapper;
 
     @Transactional
